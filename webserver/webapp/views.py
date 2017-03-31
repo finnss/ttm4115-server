@@ -1,7 +1,10 @@
 from django.shortcuts import render
 
 from django.http import HttpResponse
+from .models import Sensor
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    sensors = Sensor.objects.all()
+    context = {'sensors': sensors}
+    return render(request, 'webapp/index.html', context)

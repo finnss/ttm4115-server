@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LazyTeam's plant monitoring</title>
+</head>
+<body>
+
+<header>
+    <div id="headerContent">
+        <img src="http://d2tfjcn1pw5sr4.cloudfront.net/sites/default/files/menu_item_icon/icon-find-plants.png" width="100" id="logo" />
+    </div>
+</header>
+
+<div id="content">
+    <h1>LazyTeam's plant monitoring</h1>
+    <div>
+        This is gonna be great!
+    </div>
+    <h2>Registered sensors</h2>
+    {% if sensors %}
+        <ul>
+        {% for sensor in sensors %}
+            <li><a href="/polls/{{ sensor.id }}/">{{ sensor.serial_number }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No sensors found.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
+
+<style>
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        padding: 0;
+        margin: 0;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    
+    li {
+        padding-bottom: 3px;
+    }
+
+    header {
+        width: 100%;
+        height: 150px;
+        background-color: green;
+    }
+
+    #headerContent {
+        width: 800px;
+        margin: 0 auto;
+        padding: 20px 0;
+    }
+
+    #logo {
+
+    }
+
+    #content {
+        width: 800px;
+        margin: 0 auto;
+    }
+</style>
