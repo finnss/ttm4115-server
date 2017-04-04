@@ -1,220 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>LazyTeam's plant monitoring</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
-</head>
-<body>
+{% extends "webapp/base.html" %}
 
-<header>
-    <div id="headerContent">
-        <a href="/webapp">
-            <img
-                    src="http://d2tfjcn1pw5sr4.cloudfront.net/sites/default/files/menu_item_icon/icon-find-plants.png"
-                    width="100"
-                    id="logo"
-            />
-        </a>
-        <div id="headerRight">
-            <h1>LazyTeam's plant monitoring</h1>
-            <div id="menu">
-                <ul>
-                    <li><a>Home</a></li>
-                    <li><a>Register</a></li>
-                    <li><a>Log in</a></li>
-                </ul>
-            </div>
-        </div>
+{% block content %}
+    <h1 style="margin-bottom: 5px">You're watching these plants!</h1>
+    <div style="font-weight: 300; margin-bottom: 50px;">Thank you for making the world a greener place.</div>
 
-    </div>
-</header>
-
-<div id="content">
-    <div>
-        This is gonna be great!
-    </div>
-    <h2>Registered sensors</h2>
     {% if sensors %}
-        <ul>
+        <div id="sensors">
         {% for sensor in sensors %}
-            <li><a href="/admin/webapp/sensor/{{ sensor.id }}/">{{ sensor.serial_number }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No sensors found.</p>
-    {% endif %}
-</div>
 
-</body>
-</html>
+            <div class="sensor">
+                <a href="/admin/webapp/sensor/{{ sensor.id }}/">
+                    <h2>Sensor {{ sensor.id }} with serial number {{ sensor.serial_number }}</h2>
+                </a>
+
+                {% if sensor.monitoring_plant %}
+                    This sensor is monitoring a {{ sensor.monitoring_plant }}!
+                {% endif %}
+                The plant's moisture level is
+                <div class="moisture_background">
+                    <div class="moisture">{{ sensor.latest_reading.moisture }}</div>
+                </div>
+                Registered {{ sensor.latest_reading.timestamp }}
+            </div>
+            <div class="frontpage_line"></div>
+
+        {% endfor %}
+        </div>
+    {% else %}
+        <p>Fant ingen sensorer! <a href="/admin">Legg til noen?</a></p>
+    {% endif %}
+
 
 <style>
 
-    /* RESET (currently unused) */
-
-    /* http://meyerweb.com/eric/tools/css/reset/
-       v2.0 | 20110126
-       License: none (public domain)
-
-
-    html, body, div, span, applet, object, iframe,
-    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-    a, abbr, acronym, address, big, cite, code,
-    del, dfn, em, img, ins, kbd, q, s, samp,
-    small, strike, strong, sub, sup, tt, var,
-    b, u, i, center,
-    dl, dt, dd, ol, ul, li,
-    fieldset, form, label, legend,
-    table, caption, tbody, tfoot, thead, tr, th, td,
-    article, aside, canvas, details, embed,
-    figure, figcaption, footer, header, hgroup,
-    menu, nav, output, ruby, section, summary,
-    time, mark, audio, video {
-        margin: 0;
-        padding: 0;
-        border: 0;
-        font-size: 100%;
-        font: inherit;
-        vertical-align: baseline;
-    }
-    article, aside, details, figcaption, figure,
-    footer, header, hgroup, menu, nav, section {
-        display: block;
-    }
-    body {
-        line-height: 1;
-    }
-    ol, ul {
-        list-style: none;
-    }
-    blockquote, q {
-        quotes: none;
-    }
-    blockquote:before, blockquote:after,
-    q:before, q:after {
-        content: '';
-        content: none;
-    }
-    table {
-        border-collapse: collapse;
-        border-spacing: 0;
-    }
-    /* RESET END */
-
-    body {
-        font-family: 'Open Sans', sans-serif;
-        padding: 0;
-        margin: 0;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+    .sensor a {
+        color: black;
     }
 
-    h1, h2, h3 {
-        font-weight: 300;
+    .sensor a:hover {
+        text-decoration: underline;
+        color: black;
     }
 
-    a {
-        text-decoration: none;
-        color: #93c464;
-        transition: color 0.3s;
+    .frontpage_line {
+        width: 50%;
+        margin: 50px auto;
+        border-bottom: 1px solid black;
     }
 
-    a:hover {
-        color: #658744;
+    .frontpage_line:last-child{
+        border-bottom: none;
     }
 
-    li {
-        padding-bottom: 3px;
-    }
-
-    header {
-        width: 100%;
+    .moisture_background {
+        width: 150px;
         height: 150px;
-        background-color: green;
-        background-image: url(/webapp/assets/plant_header.jpg);
-        box-shadow: 0px 5px 10px #999
+        background-image: url(/assets/water_icon2.png);
+        background-repeat: no-repeat;
+        background-size: 150px;
+        margin: 10px 0 10px 20px;
+        text-align: center;
     }
 
-    header a {
-
-    }
-
-    #headerContent {
-        width: 800px;
+    .moisture{
+        font-size: 60px;
         margin: 0 auto;
-        padding: 20px 0;
-        color: white;
-        display: flex;
-        flex-direction: row;
-    }
-
-    #headerRight {
-        display: flex;
-        flex-direction: column;
-        order: 2;
-        margin-left: 40px;
-        font-weight: 300;
-        padding-top: 15px;
-    }
-
-    #headerRight h1 {
-        order: 1;
-        margin: 0;
-        padding: 0;
-    }
-
-    #menu {
-        order: 2;
-        margin: 15px 0 0;
-
-    }
-
-    #menu ul {
-        margin: 0;
-        padding: 0;
-    }
-
-    #menu li {
-        display: inline-block;
-        padding: 0 10px 0 0;
-        list-style-type: none;
-    }
-
-    #menu li:hover {
-        cursor: pointer;
-    }
-
-    #menu li:after {
-        padding-left: 13px;
-        content: "|";
-    }
-
-    #menu li:first-child {
-        padding-left: 2px;
-    }
-
-    #menu li:last-child:after {
-        content: "";
-    }
-
-    #menu a {
+        padding-top: 32px;
+        font-weight: 700;
         color: white;
     }
 
-    #menu a:hover {
-        color: #93c464;
-    }
-
-    #logo {
-        order: 1;
-    }
-
-    #content {
-        width: 800px;
-        margin: 0 auto;
-        padding: 30px 0 0;
-    }
 </style>
+
+{% endblock %}

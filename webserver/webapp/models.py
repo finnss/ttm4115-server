@@ -20,6 +20,9 @@ class Sensor(models.Model):
     def __str__(self):
         return 'id: ' + self.serial_number
 
+    def latest_reading(self):
+        return self.readings.order_by('-timestamp')[0]
+
 
 class SensorReading(models.Model):
     moisture = models.IntegerField()
