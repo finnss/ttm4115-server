@@ -4,25 +4,40 @@
     <h1 style="margin-bottom: 5px">You're watching these plants!</h1>
     <div style="font-weight: 300; margin-bottom: 50px;">Thank you for making the world a greener place.</div>
 
-    {% if sensors %}
+        {% if sensors %}
         <div id="sensors">
         {% for sensor in sensors %}
 
+            <div class="frontpage_line"></div>
             <div class="sensor">
-                <a href="/admin/webapp/sensor/{{ sensor.id }}/">
+
+                <a href="/admin/webapp/sensor/{{ sensor.id }}/" class="sensorHeader">
                     <h2>Sensor {{ sensor.id }} with serial number {{ sensor.serial_number }}</h2>
                 </a>
 
-                {% if sensor.monitoring_plant %}
-                    This sensor is monitoring a {{ sensor.monitoring_plant }}!
-                {% endif %}
-                The plant's moisture level is
-                <div class="moisture_background">
-                    <div class="moisture">{{ sensor.latest_reading.moisture }}</div>
+                <div class="sensorContent">
+
+                    <div class="leftContent">
+                        {% if sensor.monitoring_plant %}
+                            This sensor is monitoring a {{ sensor.monitoring_plant }}!
+                        {% endif %}
+                        The plant's moisture level in % is
+                        <div class="moisture_background">
+                            <div class="moisture">{{ sensor.latest_reading.moisture }}</div>
+                        </div>
+                        <span style="font-weight: 200">Registered {{ sensor.latest_reading.timestamp }}</span>
+                    </div>
+
+                    <div class="rightContent">
+                        <img
+                            src="/assets/latest_chart.png"
+                            width="500"
+                            id="logo"
+                        />
+                    </div>
+
                 </div>
-                Registered {{ sensor.latest_reading.timestamp }}
             </div>
-            <div class="frontpage_line"></div>
 
         {% endfor %}
         </div>
@@ -30,8 +45,12 @@
         <p>Fant ingen sensorer! <a href="/admin">Legg til noen?</a></p>
     {% endif %}
 
-
 <style>
+
+    .sensor {
+        display: flex;
+        flex-direction: column;
+    }
 
     .sensor a {
         color: black;
@@ -42,14 +61,34 @@
         color: black;
     }
 
+    .sensorHeader {
+        order: 1;
+        margin-bottom: 15px;
+    }
+
+    .sensorHeader h2 {
+        margin-top: 0;
+    }
+
+    .sensorContent {
+        order: 2;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .leftContent {
+        order: 1;
+    }
+
+    .rightContent {
+        order: 2;
+    }
+
     .frontpage_line {
         width: 50%;
         margin: 50px auto;
         border-bottom: 1px solid black;
-    }
-
-    .frontpage_line:last-child{
-        border-bottom: none;
     }
 
     .moisture_background {
@@ -58,7 +97,7 @@
         background-image: url(/assets/water_icon2.png);
         background-repeat: no-repeat;
         background-size: 150px;
-        margin: 10px 0 10px 20px;
+        margin: 10px 0 10px 45px;
         text-align: center;
     }
 
