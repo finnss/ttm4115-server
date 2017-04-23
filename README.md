@@ -15,6 +15,7 @@ This gon be gud!
 5. `source venv/bin/activate`
 6. `pip install django`
 7. `pip install paho`
-8. `python manage.py migrate`
-9. `python manage.py runserver`
-10. Should be running at `localhost:8000`!
+8. `pip install slackclient`
+9. `python manage.py migrate`
+10. `python manage.py runserver`
+11. Should be running at `localhost:8000`!
