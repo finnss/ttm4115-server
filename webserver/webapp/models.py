@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.utils import timezone
 from django.db import models
+from datetime import datetime
 
 
 class Plant(models.Model):
@@ -21,7 +22,11 @@ class Sensor(models.Model):
         return 'id: ' + self.serial_number
 
     def latest_reading(self):
-        return self.readings.order_by('-timestamp')[0]
+        if len(self.readings.all()) > 0:
+            print(self.readings)
+            return self.readings.order_by('-timestamp')[0]
+        else:
+            return { 'moisture': 0, 'timestamp': datetime.now(timezone.utc) }
 
 
 class SensorReading(models.Model):

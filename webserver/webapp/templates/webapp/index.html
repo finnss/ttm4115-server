@@ -19,9 +19,9 @@
 
                     <div class="leftContent">
                         {% if sensor.monitoring_plant %}
-                            This sensor is monitoring a {{ sensor.monitoring_plant }}!
+                            This sensor is monitoring a {{ sensor.monitoring_plant }}!<br />
                         {% endif %}
-                        The plant's moisture level in % is
+                        The plant's moisture percentage is
                         <div class="moisture_background">
                             <div class="moisture">{{ sensor.latest_reading.moisture }}</div>
                         </div>
@@ -29,8 +29,9 @@
                     </div>
 
                     <div class="rightContent">
+                        <h4 style="padding-left: 60px; margin: 0; font-weight: 600;">Moisture over time</h4>
                         <img
-                            src="/assets/latest_chart.png"
+                            src="/assets/graph-{{ sensor.serial_number }}.png"
                             width="500"
                             id="logo"
                         />
@@ -80,7 +81,7 @@
 
     .leftContent {
         order: 1;
-        padding-top: 20px;
+        text-align: center;
     }
 
     .rightContent {
@@ -103,7 +104,7 @@
         background-image: url(/assets/water_icon2.png);
         background-repeat: no-repeat;
         background-size: 150px;
-        margin: 10px 0 10px 45px;
+        margin: 10px auto 10px;
         text-align: center;
     }
 
