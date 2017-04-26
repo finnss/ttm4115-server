@@ -22,6 +22,8 @@ def verify_topic(topic):  # almost certainly overkill
 def on_connect(client, userdata, rc):
     client.subscribe("plantlife/sensors/+/humidity", qos=2)
     print("Connected")
+    print(client)
+    print(userdata)
     print(rc)
 
 
@@ -99,7 +101,7 @@ def on_message(client, userdata, msg):
         return sensor_reading
 
 
-client = mqtt.Client(client_id="plantlife-server", clean_session=False)
+client = mqtt.Client(client_id="plantlife-server", clean_session=True)
 client.on_connect = on_connect
 client.on_message = on_message
 
