@@ -3,6 +3,8 @@ from json import loads
 import json
 import requests
 from datetime import datetime, timezone
+from .graphs import draw_graph
+
 
 def verify_topic(topic):  # almost certainly overkill
     topic = topic.split("/")
@@ -19,7 +21,8 @@ def verify_topic(topic):  # almost certainly overkill
 
 def on_connect(client, userdata, rc):
     client.subscribe("plantlife/sensors/+/humidity", qos=2)
-    print("Sending message")
+    print("Connected")
+    print(rc)
 
 
 def on_message(client, userdata, msg):
@@ -46,19 +49,29 @@ def on_message(client, userdata, msg):
             lower_moisture_bound = sensor.monitoring_plant.lower_moisture_bound or -1
             plant_string = "\nMonitored plant: " + str(sensor.monitoring_plant) + "\n"
         else:
-            upper_moisture_bound = 101
-            lower_moisture_bound = -1
+            upper_moisture_bound = 100
+            lower_moisture_bound = 0
             plant_string = ""
 
-        return
+        filename = "webapp/assets/graph-" + str(data["sensor_id"]) + ".png"
+        relevant_readings = SensorReading.objects.filter(sensor=sensor)
+        values = relevant_readings.values_list("moisture")
+        timestamps = list(map(
+            lambda timestamp: (timestamp[0] - datetime.fromtimestamp(0, timezone.utc)).total_seconds() * 1000.0,
+                relevant_readings.values_list("timestamp")
+        ))
+
+        draw_graph(filename, values, timestamps, lower_moisture_bound, upper_moisture_bound)
+
+        return  # Fjern denne for å aktivere slack-meldinger
 
         # Fyr av advarsel til bruker dersom vann-nivået er out of bounds
         if moisture > upper_moisture_bound or moisture < lower_moisture_bound:
             error_message = "much" if moisture > upper_moisture_bound else "little"
-            print("Sending message")
+            print("Sending message!")
 
             message_string = "---\nOut of bounds sensor reading detected!\nSensor id: " + str(data["sensor_id"])
-            message_string += "\nTime: " + str(timestamp.strftime("%H:%M:%S %d-%m-%Y")) + "\n"
+            message_string += "\nTime: " + str(timestamp.strftime("%H.%M %d/%m/%Y")) + "\n"
             message_string += plant_string
             message_string += "Expected humidity between " + str(lower_moisture_bound) + " and " + str(upper_moisture_bound) + "%, "
             message_string += "but read " + str(moisture) + ".\n"

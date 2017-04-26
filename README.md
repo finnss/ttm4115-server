@@ -13,9 +13,7 @@ This gon be gud!
 3. `pip install --upgrade virtualenv` (assuming you have pip)
 4. `virtualenv -p python3 venv`
 5. `source venv/bin/activate`
-6. `pip install django`
-7. `pip install paho`
-8. `pip install slackclient`
-9. `python manage.py migrate`
-10. `python manage.py runserver`
-11. Should be running at `localhost:8000`!
+6. `pip install django paho-mqtt slackclient matplotlib numpy`
+8. `python manage.py migrate`
+9. `python manage.py runserver`
+10. Should be running at `localhost:8000`!

@@ -13,6 +13,8 @@ import datetime
 # max - optional maximum moisture threshold, int between and including 0 to 100. None draws nothing.
 # figsize - optional tuple of (width, height) of graph in inches. Defaults to 6.4, 4.8 with the default library style.
 # dpi - optional dpi of graph, defaults to 100.
+###
+
 def draw_graph(filename, values, timestamps=None, min=None, max=None, figsize = None, dpi=None):
     assert(min is None or min >= 0 or min <= 100)
     assert(max is None or max >= 0 or max <= 100)
